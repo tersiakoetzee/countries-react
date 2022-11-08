@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import countries from "./countriesAll.json";
+import Country from "./Country.js"
+import "./App.css";
+
 
 function App() {
+  const filterCountries = (typedValue) => {
+    return countries.filter((country) => {
+      return (
+        country.name.toLowerCase().includes(typedValue.toLowerCase()) ||
+        country.capital?.toLowerCase().includes(typedValue.toLowerCase())
+      );
+    });
+  };
+
+  const [arrayOfCountries, setArrayOfCountries] = useState(countries);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>
+        Search:
+        <input
+          type="text"
+          onChange={(e) => {
+            console.log(e.target.value, filterCountries(e.target.value));
+            setArrayOfCountries(filterCountries(e.target.value));
+          }}
+        ></input>
+      </p>
+
+      <div className="flex">
+        <Country countries={arrayOfCountries} />
+      </div>
     </div>
   );
 }
